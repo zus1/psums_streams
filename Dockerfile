@@ -16,8 +16,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
     nano \
     python \
     locales \
+    net-snmp \
     libzip-dev \
-    && docker-php-ext-install -j$(nproc) pdo_mysql zip
+    && docker-php-ext-install -j$(nproc) pdo_mysql zip php-snmp
 RUN set -ex \
     && rm -rf /var/lib/apt/lists/* \
     && MEMCACHED="`mktemp -d`" \

@@ -4,8 +4,8 @@
 class LoggerModel extends Model
 {
     protected $idField = 'id';
-    protected $table = 'log';
+    protected $table = 'streams_log';
     protected $dataSet = array(
-        "id", "message", "code", "line", "trace", "file", "created_at", "type"
+        "id", "api", "raw_result", "error", "code", "last_updated"
     );
 }

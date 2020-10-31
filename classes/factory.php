@@ -18,9 +18,16 @@ class Factory
     const MODEL_LOGGER = "model-logger-default";
     const MODEL_STREAM = "model-stream";
     const MODEL_SIGN = "model-sign";
+    const MODEL_STREAM_INPUT = "model-stream-input";
 
     const LOGGER_FILE = 'file';
     const LOGGER_DB = "db";
+
+    const API_FAST = "api-fast";
+    const API_BACON = "api-bacon";
+    const API_HIPSUM = "api-hipsum";
+    const API_META = "api-meta";
+    const API_AGGREGATOR = "aggregator";
 
     const TYPE_METHOD_MAPPING = array(
         self::TYPE_DATABASE => "getDatabase",
@@ -40,7 +47,17 @@ class Factory
         self::MODEL_LOGGER => "getModelLogger",
         self::MODEL_STREAM => "getModelStream",
         self::MODEL_SIGN => "getModelSign",
+        self::MODEL_STREAM_INPUT => "getModelStreamInput",
     );
+
+    const API_TO_MODEL_MAPPING = array(
+        self::API_FAST => "getApiFast",
+        self::API_BACON => "getApiBacon",
+        self::API_HIPSUM => "getApiHipsum",
+        self::API_META => "getApiMeta",
+        self::API_AGGREGATOR => "getApiAggregator",
+    );
+
     const LIBRARY_TO_TYPE_MAPPING = array();
 
     const LOGGER_TO_METHOD_MAPPING = array(
@@ -71,7 +88,7 @@ class Factory
     /**
      * @param string $type
      * @param bool $singleton
-     * @return Database|Validator|DateHandler|Stream
+     * @return Database|Validator|DateHandler|Stream|StreamController
      */
     public static function getObject(string $type, bool $singleton=false) {
         if(!array_key_exists($type, self::TYPE_METHOD_MAPPING)) {
@@ -93,7 +110,7 @@ class Factory
 
     /**
      * @param string $modelType
-     * @return LoggerWebModel|LoggerApiModel
+     * @return StreamInputModel
      */
     public static function getModel(string $modelType) {
         if(!array_key_exists($modelType, self::MODEL_TO_METHOD_MAPPING)) {
@@ -108,6 +125,22 @@ class Factory
     }
 
     /**
+     * @param string $apiType
+     * @return CallMetaphorpsum|CallHipsum|CallBaconipsum|CallAsdfast|CallAggregator|null
+     */
+    public static function getApi(string $apiType) {
+        if(!array_key_exists($apiType, self::API_TO_MODEL_MAPPING)) {
+            return null;
+        }
+        if(!isset(self::$instances[$apiType])) {
+            $object = call_user_func([new self(), self::API_TO_MODEL_MAPPING[$apiType]]);
+            self::$instances[$apiType] = $object;
+        }
+
+        return self::$instances[$apiType];
+    }
+
+    /**
      * @param string $libraryType
      * @return object
      */
@@ -119,6 +152,30 @@ class Factory
         return call_user_func([new self(), self::LIBRARY_TO_TYPE_MAPPING[$libraryType]]);
     }
 
+    private function getModelStreamInput() {
+        return new StreamInputModel($this->getValidator());
+    }
+
+    private function getApiAggregator() {
+        return new CallAggregator(self::getLogger());
+    }
+
+    private function getApiFast() {
+        return new CallAsdfast(self::getLogger());
+    }
+
+    private function getApiBacon() {
+        return new CallBaconipsum(self::getLogger());
+    }
+
+    private function getApiHipsum() {
+        return new CallHipsum(self::getLogger());
+    }
+
+    private function getApiMeta() {
+        return new CallMetaphorpsum(self::getLogger());
+    }
+
     private function getSign() {
         return new Sign();
     }
@@ -127,12 +184,8 @@ class Factory
         return new SignModel($this->getValidator());
     }
 
-    private function getModelLoggerStream() {
-        return new LoggerStreamModel($this->getValidator());
-    }
-
     private function getStream() {
-        return new Stream($this->getValidator(), self::getLogger());
+        return new Stream($this->getValidator(), self::getLogger(), $this->getSign());
     }
 
     private function getModelStream() {
@@ -153,10 +206,6 @@ class Factory
 
     private function getFileLogger() {
         return new LoggerFile();
-    }
-
-    private function getModelLoggerWeb() {
-        return new LoggerWebModel($this->getValidator());
     }
 
     private function getModelLoggerApi() {
