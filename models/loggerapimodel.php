@@ -4,8 +4,8 @@
 class LoggerApiModel extends Model
 {
     protected $idField = 'id';
-    protected $table = 'log_api';
+    protected $table = 'streams_api_call_log';
     protected $dataSet = array(
-        "id", "message", "code", "line", "trace", "file", "created_at", "type"
+        "id", "api", "raw_result", "error", "code", "last_updated"
     );
 }

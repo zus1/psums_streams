@@ -16,6 +16,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
     nano \
     python \
     locales \
+    snmpd \
+    snmp \
+    libsnmp-dev \
     libzip-dev \
     && docker-php-ext-install -j$(nproc) pdo_mysql zip
 RUN set -ex \

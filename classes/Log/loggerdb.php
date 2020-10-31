@@ -6,9 +6,7 @@ class LoggerDb extends Logger implements LoggerInterface
     public function getLoggerSettings(string $type): array
     {
         return array(
-            self::LOGGER_WEB => array("model" => Factory::getModel(Factory::MODEL_LOGGER_WEB)),
             self::LOGGER_API => array("model" => Factory::getModel(Factory::MODEL_LOGGER_API)),
-            self::LOGGER_STREAM => array("model" => Factory::getModel(Factory::MODEL_LOGGER_STREAM)),
             self::LOGGER_DEFAULT => array("model" => Factory::getModel(Factory::MODEL_LOGGER)),
         )[$type];
     }
@@ -21,24 +19,22 @@ class LoggerDb extends Logger implements LoggerInterface
         return $settings["model"];
     }
 
-    public function logException(Exception $e): void
+    public function logApi(string $api, string $rawResult, ?int $error=0, ?int $code=0): void
     {
         $model = $this->getModel();
         $model->insert(array(
-            "type" => "exception",
-            'message' => $e->getMessage(),
-            'code' => ($e->getCode())? $e->getCode() : null,
-            'line' => $e->getLine(),
-            'file' => $e->getFile(),
-            'trace' => $this->formatExceptionTrace($e)
+            "api" => $api,
+            'raw_result' => $rawResult,
+            'error' => $error,
+            'code' => $code,
         ));
     }
 
     public function log(string $message, ?string $type = "message"): void {
         $model = $this->getModel();
         $model->insert(array(
-            "type" => $type,
-            "message" => $message
+            "api" => $type,
+            "raw" => $message
         ));
     }
 }
