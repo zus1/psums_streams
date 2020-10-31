@@ -4,10 +4,8 @@ class Factory
 {
     const TYPE_STREAM_CONTROLLER = "stream-controller";
     const TYPE_DATABASE = "database";
-    const TYPE_ROUTER = "router";
     const TYPE_HTTP_PARSER = "httpparser";
     const TYPE_VALIDATOR = 'validator';
-    const TYPE_JSON_PARSER = "json-parser";
     const TYPE_DATE_HANDLER = "date-handler";
     const TYPE_STREAM = "stream";
     const TYPE_SIGN = "sign";
@@ -33,7 +31,6 @@ class Factory
         self::TYPE_DATABASE => "getDatabase",
         self::TYPE_HTTP_PARSER => "getHttpParser",
         self::TYPE_VALIDATOR => 'getValidator',
-        self::TYPE_JSON_PARSER => "getJsonParser",
         self::TYPE_DATE_HANDLER => "getDateHandler",
         self::TYPE_STREAM_CONTROLLER => "getStreamController",
         self::TYPE_STREAM => "getStream",
@@ -196,10 +193,6 @@ class Factory
         return new StreamController($this->getValidator(), $this->getStream());
     }
 
-    private function getExceptionHandler() {
-        return new ExceptionHandler(self::getLogger());
-    }
-
     private function getDbLogger() {
         return new LoggerDb();
     }
@@ -226,10 +219,6 @@ class Factory
 
     private function getValidator() {
         return new Validator();
-    }
-
-    private function getJsonParser() {
-        return new JsonParser();
     }
 
     public function getDateHandler() {
