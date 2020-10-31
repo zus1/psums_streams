@@ -74,7 +74,6 @@ class Stream
     }
 
     private function handleStreamApiRefresh(string $streamId, string $streamName) {
-        //TODO Handle logging
         $returnStream = "";
         $callObject = $this->getApiObject($streamName);
         $result = $callObject->getIpsum();
@@ -131,7 +130,9 @@ class Stream
             $db->commit();
         } catch(Exception $e) {
             $db->rollBack();
-            $this->logger->setType(Logger::LOGGER_API)->logApi($response["api_name"], $response["raw_result"], $response["error"], $response["code"]);
+            if(isset($response["api_name"])) {
+                $this->logger->setType(Logger::LOGGER_API)->logApi($response["api_name"], $response["raw_result"], $response["error"], $response["code"]);
+            }
             throw $e;
         }
     }
