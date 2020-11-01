@@ -1,6 +1,14 @@
 <?php
 
+namespace PsumsStreams\Classes;
 
+/**
+ * Class HttpCodes
+ * @package PsumsStreams\Classes
+ *
+ * Library of http codes used in project
+ *
+ */
 class HttpCodes
 {
     const HTTP_ACCEPTED = 202;

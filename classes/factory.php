@@ -1,12 +1,36 @@
 <?php
 
+namespace PsumsStreams\Classes;
+
+use PsumsStreams\Classes\Api\CallAggregator;
+use PsumsStreams\Classes\Api\CallAsdfast;
+use PsumsStreams\Classes\Api\CallBaconipsum;
+use PsumsStreams\Classes\Api\CallHipsum;
+use PsumsStreams\Classes\Api\CallMetaphorpsum;
+use PsumsStreams\Classes\Controllers\StreamController;
+use PsumsStreams\Classes\Log\LoggerDb;
+use PsumsStreams\Classes\Log\LoggerFile;
+use PsumsStreams\Config\Config;
+use PsumsStreams\Models\LoggerApiModel;
+use PsumsStreams\Models\LoggerModel;
+use PsumsStreams\Models\SignModel;
+use PsumsStreams\Models\StreamInputModel;
+use PsumsStreams\Models\StreamModel;
+
+/**
+ * Class Factory
+ * @package PsumsStreams\Classes
+ *
+ * Main container for generating object and handling dependency injection.
+ * Can return Objects, Extenders, Models and Libraries
+ *
+ */
 class Factory
 {
     const TYPE_STREAM_CONTROLLER = "stream-controller";
     const TYPE_DATABASE = "database";
     const TYPE_HTTP_PARSER = "httpparser";
     const TYPE_VALIDATOR = 'validator';
-    const TYPE_DATE_HANDLER = "date-handler";
     const TYPE_STREAM = "stream";
     const TYPE_SIGN = "sign";
 
@@ -31,7 +55,6 @@ class Factory
         self::TYPE_DATABASE => "getDatabase",
         self::TYPE_HTTP_PARSER => "getHttpParser",
         self::TYPE_VALIDATOR => 'getValidator',
-        self::TYPE_DATE_HANDLER => "getDateHandler",
         self::TYPE_STREAM_CONTROLLER => "getStreamController",
         self::TYPE_STREAM => "getStream",
         self::TYPE_SIGN => "getSign",
@@ -85,7 +108,7 @@ class Factory
     /**
      * @param string $type
      * @param bool $singleton
-     * @return Database|Validator|DateHandler|Stream|StreamController
+     * @return Database|Validator|Stream|StreamController
      */
     public static function getObject(string $type, bool $singleton=false) {
         if(!array_key_exists($type, self::TYPE_METHOD_MAPPING)) {
@@ -219,9 +242,5 @@ class Factory
 
     private function getValidator() {
         return new Validator();
-    }
-
-    public function getDateHandler() {
-        return new DateHandler();
     }
 }

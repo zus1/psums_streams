@@ -1,5 +1,6 @@
 <?php
 
+namespace PsumsStreams\Models;
 
 class LoggerApiModel extends Model
 {

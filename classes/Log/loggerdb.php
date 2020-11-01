@@ -1,6 +1,17 @@
 <?php
 
+namespace PsumsStreams\Classes\Log;
 
+use PsumsStreams\Classes\Factory;
+use PsumsStreams\Interfaces\LoggerInterface;
+
+/**
+ * Class LoggerDb
+ * @package PsumsStreams\Classes\Log
+ *
+ * Logger for handling db log driver
+ *
+ */
 class LoggerDb extends Logger implements LoggerInterface
 {
     public function getLoggerSettings(string $type): array

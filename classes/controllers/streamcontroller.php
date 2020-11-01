@@ -1,6 +1,19 @@
 <?php
 
+namespace PsumsStreams\Classes\Controllers;
 
+use Exception;
+use PsumsStreams\Classes\Stream;
+use PsumsStreams\Classes\Validator;
+
+/**
+ * Class StreamController
+ * @package PsumsStreams\Classes\Controllers
+ *
+ * Front controller for cycling streams
+ * Called form corn instead usual router
+ *
+ */
 class StreamController
 {
     private $validator;
@@ -11,6 +24,13 @@ class StreamController
         $this->stream = $stream;
     }
 
+    /**
+     *
+     * Initiates stream cycle
+     * In one cycle api data for streams will be refreshed and stream data sent to aggregator
+     *
+     * @return string
+     */
     public function cycleStreams() {
         try {
             /*$session = new SNMP(SNMP::VERSION_2c, "aggregator", 'boguscommunity');

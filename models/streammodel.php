@@ -1,5 +1,6 @@
 <?php
 
+namespace PsumsStreams\Models;
 
 class StreamModel extends Model
 {

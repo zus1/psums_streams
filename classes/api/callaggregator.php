@@ -1,6 +1,14 @@
 <?php
 
+namespace PsumsStreams\Classes\Api;
 
+/**
+ * Class CallAggregator
+ * @package PsumsStreams\Classes\Api
+ *
+ * Handles calls to aggregator service
+ *
+ */
 class CallAggregator extends Call
 {
     const SEND_STREAM = "send-stream";

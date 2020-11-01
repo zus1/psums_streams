@@ -1,6 +1,19 @@
 <?php
 
+namespace PsumsStreams\Classes\Api;
 
+use PsumsStreams\Classes\Log\Logger;
+use PsumsStreams\Interfaces\LoggerInterface;
+
+/**
+ * Class Call
+ * @package PsumsStreams\Classes\Api
+ *
+ * Handles calls to external APIs and hnadles responses
+ * Uses PHP Curl
+ * https://www.php.net/manual/en/book.curl.php
+ *
+ */
 class Call
 {
     protected $nonJson = false;
@@ -21,12 +34,28 @@ class Call
         $this->logger = $logger;
     }
 
+    /**
+     *
+     * Makes possible to add custom curl opts
+     *
+     * @param $option
+     * @param $value
+     */
     protected function setOption($option, $value) {
         if(!array_key_exists($option, $this->customOptions)) {
             $this->customOptions[$option] = $value;
         }
     }
 
+    /**
+     *
+     * Sends request to api using curl and sends response to processing
+     *
+     * @param string $endpoint
+     * @param array $params
+     * @param bool $post
+     * @return array|mixed|string
+     */
     protected function callApi(string $endpoint, array $params, bool $post=false)  {
         $ch = curl_init();
         $options = $this->defaultOptions + $this->customOptions;
@@ -47,6 +76,15 @@ class Call
         return $this->processCallResult($result, $info);
     }
 
+    /**
+     *
+     * Handles api call responses
+     * Dose decoding if JSON and handles logging
+     *
+     * @param string $result
+     * @param $info
+     * @return array|mixed|string
+     */
     protected function processCallResult(string $result, $info) {
         $this->logger->setType(Logger::LOGGER_API);
 

@@ -1,6 +1,15 @@
 <?php
 
+namespace PsumsStreams\Classes;
 
+/**
+ * Class Validator
+ * @package PsumsStreams\Classes
+ *
+ * Main validation class for project
+ * Uses filters for sanitation
+ *
+ */
 class Validator
 {
     public function filterAlphaNumeric($value) {

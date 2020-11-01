@@ -1,6 +1,19 @@
 <?php
 
+namespace PsumsStreams\Classes;
 
+use Exception;
+use PsumsStreams\Classes\Log\Logger;
+use PsumsStreams\Interfaces\LoggerInterface;
+
+/**
+ * Class Stream
+ * @package PsumsStreams\Classes
+ *
+ * Class that handles each stream cycle
+ * In cycle api data is refreshed and stream data is sent to aggregator
+ *
+ */
 class Stream
 {
     const STREAM_FAST = "asdfast";
@@ -32,6 +45,13 @@ class Stream
         return Factory::getModel(Factory::MODEL_STREAM_INPUT);
     }
 
+    /**
+     *
+     * Return array off setting from database, to applied for specified stream
+     *
+     * @param string $streamId
+     * @return array
+     */
     private function getSettingsForStream(string $streamId) {
         $db = Factory::getObject(Factory::TYPE_DATABASE, true);
         return array(
@@ -42,6 +62,13 @@ class Stream
         );
     }
 
+    /**
+     *
+     * Returns api object to be used for data refresh, for specified stream name
+     *
+     * @param string $streamName
+     * @return mixed
+     */
     private function getApiObject(string $streamName) {
         return array(
             self::STREAM_FAST => Factory::getApi(Factory::API_FAST),
@@ -51,6 +78,15 @@ class Stream
         )[$streamName];
     }
 
+    /**
+     *
+     * Dose actual streams cycle
+     * For each available stream available words will be refreshed by calling ipsum api
+     * For each available stream, n number of words will be sent to aggregator
+     * n can be defined in setting table
+     *
+     * @param array $streams
+     */
     public function doCycleStreams(array $streams) {
         foreach($streams as $stream) {
             try {
@@ -73,6 +109,14 @@ class Stream
         }
     }
 
+    /**
+     *
+     * Handles refresh of each stream data by calling external ipsum api
+     *
+     * @param string $streamId
+     * @param string $streamName
+     * @return string
+     */
     private function handleStreamApiRefresh(string $streamId, string $streamName) {
         $returnStream = "";
         $callObject = $this->getApiObject($streamName);
@@ -99,6 +143,16 @@ class Stream
         return $returnStream;
     }
 
+    /**
+     *
+     * Handles sending n words to aggregator
+     *
+     * @param string $streamId
+     * @param string $streamName
+     * @param int $tp
+     * @param string $streamData
+     * @throws Exception
+     */
     private function handleSendToAggregator(string $streamId, string $streamName, int $tp, string $streamData) {
         if(empty($streamData)) {
             return;

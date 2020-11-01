@@ -1,5 +1,17 @@
 <?php
 
+namespace PsumsStreams\Config;
+
+use Exception;
+use PsumsStreams\Classes\HttpParser;
+
+/**
+ * Class Config
+ * @package PsumsStreams\Config
+ *
+ * Class that parses project configuration file and returns configuration values
+ *
+ */
 class Config
 {
     const ADMIN_HOME = 'ADMIN_HOME';
@@ -23,6 +35,12 @@ class Config
         return array(self::$_typeInit, self::$_typeEnv);
     }
 
+    /**
+     *
+     * Return method to apply for configuration loading
+     *
+     * @return array
+     */
     private static function getFileTypeToMethodMapping() {
         return array(
             self::$_typeEnv => "loadConfigFromEnv",
@@ -30,16 +48,31 @@ class Config
         );
     }
 
+    /**
+     *
+     * Loads configuration form config file (.env or init)
+     *
+     * @param string|null $configFile
+     * @throws Exception
+     */
     public static function init(?string $configFile="") {
         list($configFile, $extension) = self::getConfigFile($configFile);
 
-        $configArray = call_user_func_array(["Config", self::getFileTypeToMethodMapping()[$extension]], array($configFile));
+        $configArray = call_user_func_array([self::class, self::getFileTypeToMethodMapping()[$extension]], array($configFile));
         $extraConfig = self::getExtraConfig();
 
         self::$_configArray = array_merge($configArray, $extraConfig);
         self::$_initialized = true;
     }
 
+    /**
+     *
+     * Determines which config file to ger
+     *
+     * @param string $configFile
+     * @return array
+     * @throws Exception
+     */
     private static function getConfigFile(string $configFile) {
         $extension = "";
         if($configFile !== "") {
@@ -105,6 +138,12 @@ class Config
         return $envConfig;
     }
 
+    /**
+     *
+     * Custom configuration can be added here (outside init config file)
+     *
+     * @return array
+     */
     public static function getExtraConfig() {
         return array(
             "ADMIN_HOME" => HttpParser::baseUrl() . "views/adm/home.php",
@@ -112,10 +151,20 @@ class Config
         );
     }
 
-    private static function setConfig(string $key, $value) {
+    public static function setConfig(string $key, $value) {
         self::$_configArray[$key] = $value;
     }
 
+    /**
+     *
+     * Returns value from configuration array.
+     * Returns default value if not found
+     *
+     * @param string $key
+     * @param null $default
+     * @return mixed|null
+     * @throws Exception
+     */
     public static function get(string $key, $default=null) {
         if(self::$_initialized === false) {
             self::init();

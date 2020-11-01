@@ -1,6 +1,15 @@
 <?php
 
+namespace PsumsStreams\Classes\Api;
 
+/**
+ * Class CallMetaphorpsum
+ * @package PsumsStreams\Classes\Api
+ *
+ * Handles calls to Metaphorpsum api
+ * http://metaphorpsum.com/
+ *
+ */
 class CallMetaphorpsum extends Call
 {
     protected $nonJson = true;

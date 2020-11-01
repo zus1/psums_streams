@@ -1,6 +1,15 @@
 <?php
 
+namespace PsumsStreams\Classes\Api;
 
+/**
+ * Class CallBaconipsum
+ * @package PsumsStreams\Classes\Api
+ *
+ * Handles calls to BaconIpsum api
+ * https://baconipsum.com/json-api/
+ *
+ */
 class CallBaconipsum extends Call
 {
     const GET_IPSUM = "get-ipsum";

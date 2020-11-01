@@ -1,6 +1,15 @@
 <?php
 
+namespace PsumsStreams\Classes\Api;
 
+/**
+ * Class CallHipsum
+ * @package PsumsStreams\Classes\Api
+ *
+ * Handle calls to Hipsum api
+ * https://hipsum.co/the-api/
+ *
+ */
 class CallHipsum extends Call
 {
     const GET_IPSUM = "get-ipsum";

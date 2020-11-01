@@ -1,6 +1,15 @@
 <?php
 
+namespace PsumsStreams\Classes\Api;
 
+/**
+ * Class CallAsdfast
+ * @package PsumsStreams\Classes\Api
+ *
+ * Handles calls to ADsFast api
+ * http://asdfast.beobit.net/docs/
+ *
+ */
 class CallAsdfast extends Call
 {
     const GET_IPSUM = "get-ipsum";
